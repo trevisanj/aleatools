@@ -1,2 +1,2 @@
-# alea
-Alea Thorina
+# aleatools
+
