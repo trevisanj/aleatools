@@ -81,7 +81,6 @@ def do_it(filenames, from_, to):
                 fn_out = "{}.{}".format(fn, to)
                 with open(fn_out, "wb") as g:
                     g.write(bytes_out)
-                    time.sleep(1.)
                     write1("\b\b\b--> '{}' OK =D\n".format(fn_out))
 
         except Exception as e:
