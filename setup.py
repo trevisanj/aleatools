@@ -10,7 +10,7 @@ setup(
     name = 'aleatools',
     packages = find_packages(),
     include_package_data=True,
-    version = '2018.1.27',
+    version = '2019.1.7',
     license = 'GNU GPLv3',
     platforms = 'any',
     description = 'Aleatory Tools',
