@@ -16,7 +16,7 @@ import random
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 import argparse
-import a99
+import a107
 import sys
 
 
@@ -98,20 +98,20 @@ def main(args):
     print("Output filename: '{}'".format(fn_output))
     key = get_key(args.password)
     if flag_encrypt:
-        a99.encrypt_file(key, args.input, fn_output)
+        a107.encrypt_file(key, args.input, fn_output)
     else:
-        a99.decrypt_file(key, args.input, fn_output)
+        a107.decrypt_file(key, args.input, fn_output)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=a99.SmartFormatter)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=a107.SmartFormatter)
 
     parser.add_argument('password', type=str, help='encryption/decryption password')
     parser.add_argument('input', type=str, help='name of file to encrypt')
     parser.add_argument('-o', '--output', help='output filename', default=AUTO)
     parser.add_argument('-e', '--encrypt', help='encrypt mode', action="store_true")
     parser.add_argument('-d', '--decrypt', help='decrypt mode', action="store_true")
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=a99.SmartFormatter)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=a107.SmartFormatter)
 
     parser.add_argument('password', type=str, help='encryption/decryption password')
     parser.add_argument('input', type=str, help='name of file to encrypt')

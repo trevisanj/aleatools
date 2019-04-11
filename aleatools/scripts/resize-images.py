@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """Resize images.
 
 Resizes images specified with wildcards using the 'convert' command."""
@@ -7,7 +7,7 @@ import glob
 import os
 import os.path
 import argparse
-import a99
+import a107
 import shutil
 import sys
 
@@ -31,7 +31,7 @@ def pprint(*args):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description=__doc__,  formatter_class=a99.SmartFormatter)
+    parser = argparse.ArgumentParser(description=__doc__,  formatter_class=a107.SmartFormatter)
     parser.add_argument('files', type=str, help='Files specified with wildcards')
     parser.add_argument('geometry', type=str, help="New geometry as interpreted by 'convert'")
     parser.add_argument('prefix', nargs='?', type=str, default='resized', help='Prefix to be added at the beginning of the output files')

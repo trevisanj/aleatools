@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """Convert files from one encoding into another.
 
 Output files are saved as "<input filename>.<encoding>", e.g.,
@@ -16,7 +16,7 @@ import glob
 import argparse
 import sys
 import os
-import a99
+import a107
 import time
 
 
@@ -85,11 +85,11 @@ def do_it(filenames, from_, to):
 
         except Exception as e:
             write1("Oops :( {} ):\n".format(str(e)))
-            a99.get_python_logger().exception("Error recoding file '{}'".format(fn))
+            a107.get_python_logger().exception("Error recoding file '{}'".format(fn))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=a99.SmartFormatter)
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=a107.SmartFormatter)
     parser.add_argument('-f', '--from', type=str, default=DEFAULT_FROM, required=False,
         help='encoding (supposed) of input file(s)', )
     parser.add_argument('-t', '--to', default=DEFAULT_TO, required=False, type=str,

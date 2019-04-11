@@ -18,7 +18,7 @@ setup(
     author_email = 'juliotrevisan@gmail.com',
     url = 'http://github.com/trevisanj/aleatools',
     keywords= [],
-    install_requires = ['a99>=18.1.1.0', 'pycrypto'],
+    install_requires = ['a107>=18.1.1.0', 'pycrypto'],
     python_requires = '>=3',
     scripts = glob('aleatools/scripts/*.py')
 )
