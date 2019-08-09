@@ -16,8 +16,9 @@ import random
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256
 import argparse
-import a107
 import sys
+import a107
+import a107.cryptography as ay
 
 
 # default output filename
@@ -98,9 +99,9 @@ def main(args):
     print("Output filename: '{}'".format(fn_output))
     key = get_key(args.password)
     if flag_encrypt:
-        a107.encrypt_file(key, args.input, fn_output)
+        ay.encrypt_file(key, args.input, fn_output)
     else:
-        a107.decrypt_file(key, args.input, fn_output)
+        ay.decrypt_file(key, args.input, fn_output)
 
 
 if __name__ == "__main__":
