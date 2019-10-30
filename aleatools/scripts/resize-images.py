@@ -32,6 +32,7 @@ def pprint(*args):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description=__doc__,  formatter_class=a107.SmartFormatter)
+    parser.add_argument('-d', '--delete-after', action="store_true", help="Deletes each file after it has been successfully converted")
     parser.add_argument('files', type=str, help='Files specified with wildcards')
     parser.add_argument('geometry', type=str, help="New geometry as interpreted by 'convert'")
     parser.add_argument('prefix', nargs='?', type=str, default='resized', help='Prefix to be added at the beginning of the output files')
@@ -54,3 +55,11 @@ if __name__ == "__main__":
         pprint("{}Processing file '{}'...{}".format(BLUE, fn, NC))
         res = os.system("convert {} -resize {} {}".format(fn, args.geometry, fno))
         pprint("{}Error {}{}".format(RED, res, NC) if res != 0 else "{}Saved '{}'.{}".format(GREEN, fno, NC))
+        if res == 0 and args.delete_after:
+            try:
+                os.unlink(fn)
+            except Exception as e:
+                pprint(f"{RED}Error deleting file '{fn}': '{str(e)}'{NC}")
+            else:
+                pprint(f"{GREEN}File '{fn}' was deleted{NC}")
+
