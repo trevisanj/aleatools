@@ -30,7 +30,6 @@ def pprint(*args):
     print("{}resize-images.py{}:".format(PURPLE, NC), *args)
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description=__doc__,  formatter_class=a107.SmartFormatter)
     parser.add_argument('-d', '--delete-after', action="store_true", help="Deletes each file after it has been successfully converted")
     parser.add_argument('files', type=str, help='Files specified with wildcards')
