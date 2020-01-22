@@ -1,3 +1,7 @@
+"""
+API specific to pullall.py and pushall.py. Routines here have lots of side-effects, such as prints
+and system exits.
+"""
 import sys
 import os
 import logging
@@ -11,6 +15,7 @@ FN = "repos.txt"
 
 
 def push_pull_1(flag_push, repo):
+    """chdir; (git add+commit+push) or (git pull); restore dir"""
     print("\n".join(a107.format_box(repo)))
     try:
         os.chdir(os.path.join(PWD, repo))
@@ -28,6 +33,7 @@ def push_pull_1(flag_push, repo):
 
 
 def get_repos():
+    f"""Parses file {FN} and returns list of repositories."""
     if not os.path.isfile(FN):
         print(f"File '{FN} not found in directory.\n"
               "Please create a list of repositories, one per line in the file.\n"
@@ -48,7 +54,7 @@ def get_repos():
 
 def gitaux_main(flag_push, flag_simulation=False):
     f"""
-    Pushes or pulls repositories listed in file '{FN}'.
+    Pushes or pulls repositories listed in file '{FN}' (does NOT recurse into subdirectories).
     Args:
         flag_push: whether to push or pull .
         flag_simulation: if set, will just print repository name and will have no effect.
