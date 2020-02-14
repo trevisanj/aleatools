@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 """
+This is a very specific script to resize image to 64x64 pixels. I don't remember what was the initial goal.
+
 Taken from
 http://stackoverflow.com/questions/14634014/resizing-png-image-with-pil-loses-transparency
 """

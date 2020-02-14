@@ -55,10 +55,10 @@ def get_repos():
 def gitaux_main(flag_push, flag_simulation=False):
     f"""
     Pushes or pulls repositories listed in file '{FN}' (does NOT recurse into subdirectories).
+
     Args:
         flag_push: whether to push or pull .
         flag_simulation: if set, will just print repository name and will have no effect.
-    :return:
     """
     global MSG, PWD
 
