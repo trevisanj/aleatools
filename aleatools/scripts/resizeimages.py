@@ -27,7 +27,7 @@ def is_tool(name):
     return which(name) is not None
 
 def pprint(*args):
-    print("{}resize-images.py{}:".format(PURPLE, NC), *args)
+    print("{}resizeimages.py{}:".format(PURPLE, NC), *args)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__,  formatter_class=a107.SmartFormatter)
