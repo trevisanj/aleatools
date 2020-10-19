@@ -52,7 +52,7 @@ if __name__ == "__main__":
     for fn in a:
         fno = prefix+fn
         pprint("{}Processing file '{}'...{}".format(BLUE, fn, NC))
-        res = os.system("convert {} -resize {} {}".format(fn, args.geometry, fno))
+        res = os.system("convert \"{}\" -resize {} \"{}\"".format(fn, args.geometry, fno))
         pprint("{}Error {}{}".format(RED, res, NC) if res != 0 else "{}Saved '{}'.{}".format(GREEN, fno, NC))
         if res == 0 and args.delete_after:
             try:
