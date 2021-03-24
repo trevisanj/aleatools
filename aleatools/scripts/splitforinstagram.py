@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-"""Convert files from one encoding into another.
+"""
+Pastes images side-by-side, then chops to match 'aspectratio', saving each chop sequentially.
 
-Output files are saved as "<input filename>-<nnnn>.<exension>", e.g.,
-"horseshit-0000.png".
+Images are pre-resized to match height of smallest.
 
 """
 
@@ -11,76 +11,78 @@ import argparse
 import sys
 import os
 import a107
-import time
-
-DEFAULT_FROM = "utf-8"
-DEFAULT_TO = "windows-1252"
+import anguishlib
+from PIL import Image
 
 
 def wormsay0(line):
-    write0("\n")
-    write0("     ^o^ --- {}\n".format(line))
-    write0("     .\n")
-    write0("   ..\n")
-    write0("\n")
+    myprint("")
+    myprint("     ^o^ --- {}".format(line))
+    myprint("     .")
+    myprint("   ..")
+    myprint("")
 
 
 def wormsay1(line):
-    write0("\n")
-    write0("  ^o^ --- {}\n".format(line))
-    write0("    .\n")
-    write0("     ..\n")
-    write0("\n")
+    myprint("")
+    myprint("  ^o^ --- {}".format(line))
+    myprint("    .")
+    myprint("     ..")
+    myprint("")
 
 
-def recode(bytes_, from_=DEFAULT_FROM, to=DEFAULT_TO):
-    """Convert bytes_ encoding from <from_> encoding to <to> encoding."""
-
-    return bytes_.decode(from_, "replace").encode(to, "replace")
+def myprint(s):
+    print("📷 {}".format(s))
 
 
-def get_filenames(patterns, to):
-    """Compile list of file names.
 
-    Each item in patterns list may have wildcards, and these will be expanded
-    into actual filenames, then duplicates will be removed."""
-
-    _ff = []
-    for pattern in patterns:
-        _ff.extend(glob.glob(pattern))
-    ff = []
-    for f in _ff:
-        if f not in ff and not f.endswith(to):
-            ff.append(f)
-
-    return ff
+# # Old single-file version
+# def main(args):
+#     img = Image.open(args.input)
+#     imgs = anguishlib.split_for_instagram(img, args.aspectratio)
+#     name, ext = os.path.splitext(args.input)
+#     print(name, "----------------------------------", ext)
+#     for img_ in imgs:
+#         fn = a107.sequential_filename(name, ext)
+#         img_.save(fn)
+#         print(a107.format_yoda(f"'{fn}' saved it was."))
+#     line = "bye"
+#     wormsay1(line)
 
 
-def write0(s):
-    sys.stdout.write("[recode] {}".format(s))
-    sys.stdout.flush()
+def main(args):
+    filenames = glob.glob(args.input)
+    filenames.sort()
+    n = len(filenames)
+    myprint(f"Number of files: {n}")
 
+    images = [Image.open(filename) for filename in filenames]
+    minheight = min([image.size[1] for image in images])
+    flag_resize = any([image.size[1] != minheight for image in images])
 
-def write1(s):
-    sys.stdout.write(s)
-    sys.stdout.flush()
+    if flag_resize:
+        for i in range(n):
+            image = images[i]
+            if image.size[1] != minheight:
+                images[i] = anguishlib.resize_image(image, height=minheight)
+                myprint(f"Resized image from '{image.filename}'")
 
+    totalwidth = sum([image.size[0] for image in images])
 
-def do_it(filenames, from_, to):
-    for fn in filenames:
-        write0("'{}' ...".format(fn))
-        try:
-            with open(fn, 'rb') as f:
-                bytes_ = f.read()
-                bytes_out = recode(bytes_, from_, to)
-                fn_out = "{}.{}".format(fn, to)
-                with open(fn_out, "wb") as g:
-                    g.write(bytes_out)
-                    write1("\b\b\b--> '{}' OK =D\n".format(fn_out))
+    img = Image.new("RGB", (totalwidth, minheight), (0,0,0))
+    x = 0
+    for image in images:
+        img.paste(image, (x, 0))
+        x += image.size[0]
 
-        except Exception as e:
-            write1("Oops :( {} ):\n".format(str(e)))
-            a107.get_python_logger().exception("Error recoding file '{}'".format(fn))
+    imgs = anguishlib.split_for_instagram(img, args.aspectratio)
+    name, ext = os.path.splitext(filenames[0])
+    for img_ in imgs:
+        fn = a107.sequential_filename(name, ext)
+        img_.save(fn)
+        myprint(a107.format_yoda(f"'{fn}' saved it was."))
+    line = "bye"
+    wormsay1(line)
 
 
 if __name__ == "__main__":
@@ -92,18 +94,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     wormsay0("hi")
-
-    import anguishlib
-    from PIL import Image
-
-    img = Image.open(args.input)
-    imgs = anguishlib.split_for_instagram(img, args.aspectratio)
-    name, ext = os.path.splitext(args.input)
-    print(name, "----------------------------------", ext)
-    for img_ in imgs:
-        fn = a107.sequential_filename(name, ext)
-        img_.save(fn)
-        print(a107.format_yoda(f"'{fn}' saved it was."))
-
-    line = "bye"
-    wormsay1(line)
+    main(args)
