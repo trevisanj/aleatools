@@ -65,15 +65,17 @@ def main(args):
         __FOOTER
 
     """
-    probe = probe = args.containing.lower()
+    _tomatch, tomatch = args.containing.lower(), []
+    if _tomatch:
+        tomatch =  [s.strip() for s in _tomatch.split(",")]
     hostname = socket.gethostname()
-    title = f"Fonts in {hostname}"+(f" matching '{probe}'" if probe else "")
+    title = f"Fonts in {hostname}"+(f" matching {tomatch}" if tomatch else "")+f" (size={args.size})"
     family_and_file = subprocess.run(["fc-list", '--format=%{family}:%{file}\n'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     as_list = family_and_file.split("\n")
     rows = [line.split(":") for line in as_list if len(line) > 1]
     # Filters names matching "--containing" argument
-    if probe:
-        rows = [row for row in rows if probe in row[0].lower()]
+    if tomatch:
+        rows = [row for row in rows if any([name in row[0].lower() for name in tomatch])]
     # Sorts fonts alphabetically
     rows.sort(key=lambda row: row[0])
 
@@ -129,7 +131,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--size', type=int, default=32, required=False,
                         help='Font size',)
     parser.add_argument('-c', '--containing', type=str, default="", required=False,
-                        help='Filters fonts whose name contain [case-insensitive] string ', )
+                        help='Filters fonts whose name contain [case-insensitive] string. May be a list of names separated by comma ', )
     parser.add_argument('-f', '--show-filename', action="store_true",
                         help="Show font filename as well")
     parser.add_argument('text', type=str, nargs="?",
