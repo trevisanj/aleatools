@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import os, sys, argparse, a107
+import os, sys
+from colored import fg, attr
 
 SIMULATION = False
 
@@ -8,7 +9,7 @@ if __name__ == "__main__":
         print("Please specify a commit message as one or more command-line arguments.")
         sys.exit()
     msg = " ".join(sys.argv[1:])
-    print(f"Commit message: {msg}")
+    print(f"{attr('bold')}Commit message: {msg}{attr('reset')}")
     f = print if SIMULATION else os.system
     f("git add . --all")
     f("git commit -m \"{}\"".format(msg))
