@@ -32,9 +32,10 @@ def pprint(*args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__,  formatter_class=a107.SmartFormatter)
     parser.add_argument('-d', '--delete-after', action="store_true", help="Deletes each file after it has been successfully converted")
+    parser.add_argument('-o', '--output-directory', default='.', help='Output directory')
     parser.add_argument('files', type=str, help='Files specified with wildcards')
     parser.add_argument('geometry', type=str, help="New geometry as interpreted by 'convert'")
-    parser.add_argument('prefix', nargs='?', type=str, default='resized', help='Prefix to be added at the beginning of the output files')
+    parser.add_argument('prefix', nargs='?', type=str, default='resized-', help='Prefix to be added at the beginning of the output files')
 
     args = parser.parse_args()
 
@@ -43,14 +44,15 @@ if __name__ == "__main__":
         sys.exit()
 
     prefix = args.prefix
-    if not prefix.endswith(("-", "_")):
-        prefix += "-"
-        pprint("'-' appended to prefix")
+    # I think this behaviour is not necessary; rather limiting and confusing
+    # if not prefix.endswith(("-", "_")):
+    #     prefix += "-"
+    #     pprint("'-' appended to prefix")
 
     a = glob.glob(args.files)
     pprint("Number of files: ", len(a))
     for fn in a:
-        fno = prefix+fn
+        fno = os.path.join(args.output_directory, prefix+fn)
         pprint("{}Processing file '{}'...{}".format(BLUE, fn, NC))
         res = os.system("convert \"{}\" -resize {} \"{}\"".format(fn, args.geometry, fno))
         pprint("{}Error {}{}".format(RED, res, NC) if res != 0 else "{}Saved '{}'.{}".format(GREEN, fno, NC))
