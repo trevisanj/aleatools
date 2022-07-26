@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Resize images.
+"""Resizes videos re-encoding using x265
 
-Resizes images specified with wildcards using the 'convert' command."""
+Resizes videos specified with wildcards using the 'ffmpeg' command."""
 
 import glob
 import os
@@ -34,13 +34,13 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--delete-after', action="store_true", help="Deletes each file after it has been successfully converted")
     parser.add_argument('-o', '--output-directory', default='.', help='Output directory')
     parser.add_argument('files', type=str, help='Files specified with wildcards')
-    parser.add_argument('geometry', type=str, help="New geometry as interpreted by 'convert'")
+    parser.add_argument('geometry', type=str, help="New geometry, e.g. '720x405', '1024x576' etc.")
     parser.add_argument('prefix', nargs='?', type=str, default='resized-', help='Prefix to be added at the beginning of the output files')
 
     args = parser.parse_args()
 
-    if not is_tool('convert'):
-        pprint("'convert' command not found, bye.")
+    if not is_tool('ffmpeg'):
+        pprint("'ffmpeg' command not found, bye.")
         sys.exit()
 
     prefix = args.prefix
@@ -54,7 +54,12 @@ if __name__ == "__main__":
     for fn in a:
         fno = os.path.join(args.output_directory, prefix+fn)
         pprint("{}Processing file '{}'...{}".format(BLUE, fn, NC))
-        res = os.system("convert \"{}\" -resize {} \"{}\"".format(fn, args.geometry, fno))
+
+        line = f"ffmpeg -i {fn} -crf 26 -s:v {args.geometry} {fno}"
+        # line = f"ffmpeg -i {fn} -vcodec libx265 -crf 28 -s:v {args.geometry} {fno}"
+        pprint(line)
+        res = os.system(line)
+        # res = 0
         pprint("{}Error {}{}".format(RED, res, NC) if res != 0 else "{}Saved '{}'.{}".format(GREEN, fno, NC))
         if res == 0 and args.delete_after:
             try:
