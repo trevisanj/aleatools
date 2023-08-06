@@ -13,7 +13,7 @@ setup(
     author_email = 'juliotrevisan@gmail.com',
     url = 'http://github.com/trevisanj/aleatools',
     keywords= [],
-    install_requires = ['pycrypto'],
+    install_requires = ['pycryptodome'],
     python_requires = '>=3',
     scripts = glob('aleatools/scripts/*.py')
 )
