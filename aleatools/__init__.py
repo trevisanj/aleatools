@@ -1,4 +1,5 @@
 from .gitaux import *
+from .terminal2png import *
 
 def asciilogo():
 
