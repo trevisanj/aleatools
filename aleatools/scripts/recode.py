@@ -33,9 +33,14 @@ wormsay1 = console.wormsay1
 
 
 def recode(bytes_, from_=DEFAULT_FROM, to=DEFAULT_TO):
-    """Convert bytes_ encoding from <from_> encoding to <to> encoding."""
+    """Convert bytes_ encoding from <from_> encoding to <to> encoding.
 
-    return bytes_.decode(from_, "replace").encode(to, "replace")
+    Unencodable characters are preserved as numeric entities so the output
+    stays valid even when the target charset cannot represent them.
+    """
+
+    text = bytes_.decode(from_, "replace")
+    return text.encode(to, "xmlcharrefreplace")
 
 
 def get_filenames(patterns, to):
@@ -61,7 +66,7 @@ def do_it(filenames, from_, to):
         try:
             fn_out = "{}.{}".format(fn, to)
             if os.path.exists(fn_out):
-                if not a107.yesno("ATTENTION: File '{}' already exists. Overwrite it?".format(fn_out)):
+                if not a107.yesno("ATTENTION: File '{}' already exists. Overwrite it?".format(fn_out), default=True):
                     write1(" skipped overwrite.\n")
                     continue
             with open(fn, 'rb') as f:

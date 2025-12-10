@@ -209,7 +209,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if os.path.exists(output_path):
-        if not a107.yesno("ATTENTION: File '{}' already exists. Overwrite it?".format(output_path)):
+        if not a107.yesno("ATTENTION: File '{}' already exists. Overwrite it?".format(output_path), default=True):
             write0("output not overwritten.\n")
             sys.exit(0)
 
