@@ -19,24 +19,17 @@ import os
 import a107
 import time
 
+from _cli_common import make_console
 
 DEFAULT_FROM = "utf-8"
 DEFAULT_TO = "windows-1252"
 
 
-def wormsay0(line):
-    write0("\n")
-    write0("     ^o^ --- {}\n".format(line))
-    write0("     .\n")
-    write0("   ..\n")
-    write0("\n")
-
-def wormsay1(line):
-    write0("\n")
-    write0("  ^o^ --- {}\n".format(line))
-    write0("    .\n")
-    write0("     ..\n")
-    write0("\n")
+console = make_console("recode")
+write0 = console.write0
+write1 = console.write1
+wormsay0 = console.wormsay0
+wormsay1 = console.wormsay1
 
 
 def recode(bytes_, from_=DEFAULT_FROM, to=DEFAULT_TO):
@@ -62,23 +55,18 @@ def get_filenames(patterns, to):
     return ff
 
 
-def write0(s):
-    sys.stdout.write("[recode] {}".format(s))
-    sys.stdout.flush()
-
-def write1(s):
-    sys.stdout.write(s)
-    sys.stdout.flush()
-
-
 def do_it(filenames, from_, to):
     for fn in filenames:
         write0("'{}' ...".format(fn))
         try:
+            fn_out = "{}.{}".format(fn, to)
+            if os.path.exists(fn_out):
+                if not a107.yesno("ATTENTION: File '{}' already exists. Overwrite it?".format(fn_out)):
+                    write1(" skipped overwrite.\n")
+                    continue
             with open(fn, 'rb') as f:
                 bytes_ = f.read()
                 bytes_out = recode(bytes_, from_, to)
-                fn_out = "{}.{}".format(fn, to)
                 with open(fn_out, "wb") as g:
                     g.write(bytes_out)
                     write1("\b\b\b--> '{}' OK =D\n".format(fn_out))
