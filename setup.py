@@ -14,6 +14,7 @@ setup(
     url = 'http://github.com/trevisanj/aleatools',
     keywords= [],
     install_requires = ['pycryptodome'],
+    extras_require = {'photos': ['Pillow>=11.1', 'a107']},
     python_requires = '>=3',
     scripts = glob('aleatools/scripts/*.py')
 )
